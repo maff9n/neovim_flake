@@ -1,7 +1,7 @@
 { pkgs }:
 let
   customRC = import ../config { inherit pkgs; };
-  secrets = import ../.secrets/secrets.nix;
+  # secrets = import ../.secrets/secrets.nix;
   plugins = import ../plugins.nix { inherit pkgs; };
   runtimeDeps = import ../runtimeDeps.nix { inherit pkgs; };
   neovimRuntimeDependencies = pkgs.symlinkJoin {
@@ -11,7 +11,7 @@ let
     postBuild = ''
       for f in $out/lib/node_modules/.bin/*; do
          path="$(readlink --canonicalize-missing "$f")"
-         ln -s "$path" "$out/bin/$(basename $f)"
+         ln -f -s "$path" "$out/bin/$(basename $f)"
       done
     '';
   };
@@ -26,6 +26,6 @@ pkgs.writeShellApplication {
   name = "nvim";
   runtimeInputs = [ neovimRuntimeDependencies ];
   text = ''
-    OPENAI_API_KEY=${secrets.openai-api-key} ${myNeovimUnwrapped}/bin/nvim "$@"
+    ${myNeovimUnwrapped}/bin/nvim "$@"
   '';
 }

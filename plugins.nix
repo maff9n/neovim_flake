@@ -4,5 +4,4 @@ with pkgs.vimPlugins; [
   telescope-recent-files
   nvim-lspconfig
   ultisnips
-  ChatGPT-nvim
 ]
