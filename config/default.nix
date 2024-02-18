@@ -29,5 +29,6 @@ let
   lua = scripts2ConfigFiles "lua";
   luanix = nixFiles2ConfigFiles "luanix";
 
+#concatStringsSep "/" ["usr" "local" "bin"] == "usr/local/bin"
 in builtins.concatStringsSep "\n"
 (builtins.map (configs: sourceConfigFiles configs) [ vim lua luanix])
