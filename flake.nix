@@ -12,38 +12,45 @@
       url = "github:smartpde/telescope-recent-files";
       flake = false;
     };
+    harpoon = {
+      url = "github:ThePrimeagen/harpoon/harpoon2";
+      flake = false;
+    };
   };
   outputs =
     { self
     , nixpkgs
     , neovim
     , telescope-recent-files-src
+    , harpoon
     }:
     let
-      supportedSystems = [ "x86_64-linux" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs =
-          let
-            overlayFlakeInputs = prev: final: {
-              neovim = neovim.packages.${prev.system}.neovim;
+      overlayFlakeInputs = prev: final: {
+        neovim = neovim.packages.${prev.system}.neovim;
 
-              vimPlugins = final.vimPlugins // {
-                telescope-recent-files = import ./packages/vimPlugins/telescopeRecentFiles.nix {
-                  src = telescope-recent-files-src;
-                  pkgs = prev;
-                };
-              };
-            };
-            overlayMyNeovim = prev: final: {
-              myNeovim = import ./packages/myNeovim.nix {
-                pkgs = prev;
-              };
-            };
-          in
-          import nixpkgs {
-            system = system;
-            overlays = [ overlayFlakeInputs overlayMyNeovim ];
+        vimPlugins = final.vimPlugins // {
+          telescope-recent-files = import ./packages/vimPlugins/telescopeRecentFiles.nix {
+            src = telescope-recent-files-src;
+            pkgs = prev;
           };
+          harpoon = prev.vimUtils.buildVimPlugin {
+            name = "harpoon";
+            src = harpoon;
+            buildInputs = with prev; [ stylua ];
+            };
+        };
+      };
+      overlayMyNeovim = prev: final: {
+        myNeovim = import ./packages/myNeovim.nix {
+          pkgs = prev;
+        };
+      };
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
+        pkgs = import nixpkgs {
+          system = system;
+          overlays = [ overlayFlakeInputs overlayMyNeovim ];
+        };
       });
     in
     {

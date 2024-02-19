@@ -1,9 +1,17 @@
 { pkgs }:
 let
   customRC = import ../config { inherit pkgs; };
-  # secrets = import ../.secrets/secrets.nix;
-  plugins = import ../plugins.nix { inherit pkgs; };
-  runtimeDeps = import ../runtimeDeps.nix { inherit pkgs; };
+  plugins = with pkgs.vimPlugins; [
+    telescope-nvim
+    nvim-cmp
+    telescope-recent-files
+    nvim-lspconfig
+    harpoon
+  ];
+  runtimeDeps = with pkgs; [
+    nodePackages.typescript
+    nodePackages.typescript-language-server
+  ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
     name = "neovimRuntimeDependencies";
     paths = runtimeDeps;

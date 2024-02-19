@@ -13,5 +13,4 @@ Once I fill this repository up with my personal tweaks, it will be ready for my 
 
 ## Credit
 
-This configuration draws inspiration from [article](https://primamateria.github.io/blog/neovim-nix/).  
-
+The configuration heavily draws inspiration from this [article](https://primamateria.github.io/blog/neovim-nix/).  
