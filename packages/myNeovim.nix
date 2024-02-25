@@ -4,6 +4,7 @@ let
   plugins = with pkgs.vimPlugins; [
     telescope-nvim
     nvim-cmp
+    nvim-treesitter
     telescope-recent-files
     nvim-lspconfig
     harpoon
@@ -11,6 +12,9 @@ let
   runtimeDeps = with pkgs; [
     nodePackages.typescript
     nodePackages.typescript-language-server
+    rust-analyzer
+    nodePackages.bash-language-server
+    python310Packages.python-lsp-server
   ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
     name = "neovimRuntimeDependencies";

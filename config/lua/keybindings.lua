@@ -24,5 +24,27 @@ vim.keymap.set('', '<4-MiddleMouse>', '<nop>')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
--- Search
-vim.keymap.set('n', '77', ':let @/=""<CR>')
+vim.keymap.set('', '<C-h>', '<C-w>h')
+vim.keymap.set('', '<C-j>', '<C-w>j')
+vim.keymap.set('', '<C-k>', '<C-w>k')
+vim.keymap.set('', '<C-l>', '<C-w>l')
+
+-- add point in undo list
+vim.keymap.set('i', '[', '[<C-g>u')
+vim.keymap.set('i', ']', ']<C-g>u')
+
+vim.keymap.set('v', '>', '>gv')
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('n', '<', '<<')
+vim.keymap.set('n', '>', '>>')
+
+vim.keymap.set('n', 'J', '>+1<CR>gv=gv')
+vim.keymap.set('n', 'K', '<-2<CR>gv=gv')
+vim.keymap.set('n', 'J', '.+1<CR>==')
+vim.keymap.set('n', 'K', '.-2<CR>==')
+
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Prevents space execution in case leaders follows no command
+vim.keymap.set('n', '<SPACE>', '<nop>')
