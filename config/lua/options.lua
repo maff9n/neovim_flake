@@ -25,5 +25,8 @@ vim.opt.hlsearch  = true
 vim.opt.breakindent  = true
 vim.opt.cursorline = true
 vim.opt.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.api.nvim_set_hl(0, "CursorLine", { ctermbg=237 })

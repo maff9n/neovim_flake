@@ -12,9 +12,17 @@ let
   runtimeDeps = with pkgs; [
     nodePackages.typescript
     nodePackages.typescript-language-server
+    cmake-language-server
+    yaml-language-server
+    elmPackages.elm-language-server
+    nodePackages_latest.vscode-html-languageserver-bin
+    lua-language-server
+    rnix-lsp
+    sqls
     rust-analyzer
     nodePackages.bash-language-server
-    python310Packages.python-lsp-server
+    python311Packages.python-lsp-server
+
   ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
     name = "neovimRuntimeDependencies";
