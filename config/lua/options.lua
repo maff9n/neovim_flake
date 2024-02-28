@@ -1,7 +1,5 @@
 require "os"
 
--- vim.opt.spell = true
--- vim.opt.spelllang = "en"
 vim.opt.writebackup = true
 vim.opt.backup = true
 vim.opt.backupdir = os.getenv("HOME") .. "/.config/nvim/backup_directory"

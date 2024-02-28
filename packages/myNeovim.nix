@@ -4,6 +4,10 @@ let
   plugins = with pkgs.vimPlugins; [
     telescope-nvim
     nvim-cmp
+    cmp-buffer
+    cmp-nvim-lsp
+    cmp-path
+    cmp-cmdline
     nvim-treesitter
     telescope-recent-files
     nvim-lspconfig
@@ -21,7 +25,7 @@ let
     sqls
     rust-analyzer
     nodePackages.bash-language-server
-    python311Packages.python-lsp-server
+    python310Packages.python-lsp-server
 
   ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
