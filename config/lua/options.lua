@@ -19,7 +19,10 @@ vim.opt.undofile  = true
 vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim/undo_history"
 vim.opt.incsearch  = true
 vim.opt.mousehide  = true
+
 vim.opt.hlsearch  = true
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
 vim.opt.breakindent  = true
 vim.opt.cursorline = true
 vim.opt.list = true

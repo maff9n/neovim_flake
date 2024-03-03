@@ -2,18 +2,32 @@
 let
   customRC = import ../config { inherit pkgs; };
   plugins = with pkgs.vimPlugins; [
+    harpoon
     telescope-nvim
+    telescope-recent-files
+    nvim-lspconfig
+
+    # language parser mostly used for better highlighting
+    nvim-treesitter ## nvim-treesitter.withAllGrammars is available but slows down :checkhealth
+
+    # highlighting + indentation for nix files
+    vim-nix
+
+    # full support for LSP completion related capabilities
     nvim-cmp
     cmp-buffer
     cmp-nvim-lsp
     cmp-path
-    cmp-cmdline
-    nvim-treesitter
-    telescope-recent-files
-    nvim-lspconfig
-    harpoon
+    luasnip
   ];
-  runtimeDeps = with pkgs; [
+  runtimeDeps =
+    with pkgs; [
+    gcc
+    gopls
+    golint
+    govulncheck
+    rnix-lsp
+    tree-sitter
     nodePackages.typescript
     nodePackages.typescript-language-server
     cmake-language-server
@@ -21,12 +35,10 @@ let
     elmPackages.elm-language-server
     nodePackages_latest.vscode-html-languageserver-bin
     lua-language-server
-    rnix-lsp
     sqls
     rust-analyzer
     nodePackages.bash-language-server
-    python310Packages.python-lsp-server
-
+    python311Packages.python-lsp-server
   ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
     name = "neovimRuntimeDependencies";
