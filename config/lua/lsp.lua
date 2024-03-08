@@ -1,25 +1,29 @@
-local util = require "lspconfig/util"
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
 
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
--- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
--- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- TODO find a better - more local - solution
+local diagnostic_toggle = true
+function diagnostic_toggle_function()
+    if (diagnostic_toggle)
+    then
+        vim.diagnostic.disable()
+        diagnostic_toggle = false
+    else
+        vim.diagnostic.enable()
+        diagnostic_toggle = true
+    end
+end
+
+vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua diagnostic_toggle_function()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
 vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
+    -- (Enable completion triggered by <c-x><c-o>) Redundant?
+    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    -- KEYBINDINGS
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
@@ -28,12 +32,21 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl',
-    '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    -- Mappings.
+    -- AUTOCOMMANDS
+    vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup("lspTweaks", { clear = true, }),
+        pattern = client.filetypes,
+        callback = function(args)
+            vim.lsp.buf.formatting_sync()
+        end,
+    })
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -45,35 +58,7 @@ require('lspconfig').pylsp.setup({
     on_attach = on_attach,
     flags = {},
     capabilities = capabilities,
-    plugins = {
-        rope = {
-            enabled = true,
-        },
-        pyflakes = {
-            enabled = true,
-        },
-        mccabe = {
-            enabled = false,
-        },
-        pycodestyle = {
-            enabled = true,
-        },
-        pydocstyle = {
-            enabled = true,
-        },
-        autopep8 = {
-            enabled = true,
-        },
-        yapf = {
-            enabled = true,
-        },
-        flake8 = {
-            enabled = true,
-        },
-        pylint = {
-            enabled = true,
-        },
-    },
+    plugins = {},
 })
 
 require('lspconfig').gopls.setup({
@@ -81,7 +66,7 @@ require('lspconfig').gopls.setup({
     flags = {},
     cmd = { "gopls" },
     filetypes = { "go", "gomod", "gowork", "gotmpl" },
-    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
     settings = {
         gopls = {
             completeUnimported = true,
