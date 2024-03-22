@@ -6,8 +6,6 @@ let
     telescope-nvim
     telescope-recent-files
     nvim-lspconfig
-
-    # language parser mostly used for better highlighting
     nvim-treesitter ## nvim-treesitter.withAllGrammars is available but slows down :checkhealth
 
     # highlighting + indentation for nix files
@@ -19,27 +17,37 @@ let
     cmp-nvim-lsp
     cmp-path
     luasnip
+  ] ++ [
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "copilot";
+      src = pkgs.fetchFromGitHub {
+        owner = "github";
+        repo = "copilot.vim";
+        rev = "9484e35cf222e9360e05450622a884f95c662c4c";
+        sha256 = "sha256-tcLrto1Y66MtPnfIcU2PBOxqE0xilVl4JyKU6ddS7bA=";
+      };
+    })
   ];
   runtimeDeps =
     with pkgs; [
-    gcc
-    gopls
-    golint
-    govulncheck
-    rnix-lsp
-    tree-sitter
-    nodePackages.typescript
-    nodePackages.typescript-language-server
-    cmake-language-server
-    yaml-language-server
-    elmPackages.elm-language-server
-    nodePackages_latest.vscode-html-languageserver-bin
-    lua-language-server
-    sqls
-    rust-analyzer
-    nodePackages.bash-language-server
-    python311Packages.python-lsp-server
-  ];
+      gcc
+      gopls
+      golint
+      govulncheck
+      rnix-lsp
+      tree-sitter
+      nodePackages.typescript
+      nodePackages.typescript-language-server
+      cmake-language-server
+      yaml-language-server
+      elmPackages.elm-language-server
+      nodePackages_latest.vscode-html-languageserver-bin
+      lua-language-server
+      sqls
+      rust-analyzer
+      nodePackages.bash-language-server
+      python311Packages.python-lsp-server
+    ];
   neovimRuntimeDependencies = pkgs.symlinkJoin {
     name = "neovimRuntimeDependencies";
     paths = runtimeDeps;
