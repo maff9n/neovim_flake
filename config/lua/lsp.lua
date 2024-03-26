@@ -1,19 +1,22 @@
 local opts = { noremap = true, silent = true }
 
--- TODO find a better - more local - solution
-local diagnostic_toggle = true
-function diagnostic_toggle_function()
-    if (diagnostic_toggle)
-    then
-        vim.diagnostic.disable()
-        diagnostic_toggle = false
-    else
-        vim.diagnostic.enable()
-        diagnostic_toggle = true
+function toggle_diagnostic_hints()
+    local switch = true
+    return function()
+        if (switch)
+        then
+            vim.diagnostic.disable()
+            switch = false
+        else
+            vim.diagnostic.enable()
+            switch = true
+        end
     end
 end
 
-vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua diagnostic_toggle_function()<CR>', opts)
+toggle_diagnostic_hints = toggle_diagnostic_hints()
+
+vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua toggle_diagnostic_hints()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
