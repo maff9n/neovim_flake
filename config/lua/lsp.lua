@@ -1,46 +1,37 @@
-local opts = { noremap = true, silent = true }
-
-function toggle_diagnostic_hints()
-    local switch = true
-    return function()
-        if (switch)
-        then
-            vim.diagnostic.disable()
-            switch = false
-        else
-            vim.diagnostic.enable()
-            switch = true
+toggle_diagnostic_hints = (function()
+        local switch = true
+        return function()
+            if (switch)
+            then
+                vim.diagnostic.disable()
+                switch = false
+            else
+                vim.diagnostic.enable()
+                switch = true
+            end
         end
-    end
-end
+    end)()
 
-toggle_diagnostic_hints = toggle_diagnostic_hints()
-
-vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua toggle_diagnostic_hints()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua toggle_diagnostic_hints()<CR>', opts)   -- toggle visibility of any diagnostic hints
+vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)  -- set the quickfix list to the diagnostics
+vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts) -- open the diagnostic float window
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)        -- go to the previous diagnostic
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)        -- go to the next diagnostic
 
 local on_attach = function(client, bufnr)
-    -- (Enable completion triggered by <c-x><c-o>) Redundant?
-    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     -- Mappings.
     -- KEYBINDINGS
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)           -- search for declaration of the symbol under the cursor
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)            -- jump to the definition of the symbol under the cursor
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)                  -- show hover information for the symbol under the cursor
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)        -- list all implementations of the symbol under the cursor in the quickfix window
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)     -- show signature help for the symbol under the cursor
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl',
-        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)                      -- list all workspace folders
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts) -- jump to the type definition of the symbol under the cursor
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)            -- list all references of the symbol under the cursor in the quickfix window
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)      -- format the current buffer
     -- Mappings.
     -- AUTOCOMMANDS
     vim.api.nvim_create_autocmd('BufWritePre', {
@@ -53,10 +44,6 @@ local on_attach = function(client, bufnr)
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- capabilities make the ls aware of the options of the editor?
---
--- could use a loop here -> most likely nothing is done here anyways
--- rope etc are packaged by python311 anyways
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
     flags = {},
