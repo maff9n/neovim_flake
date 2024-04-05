@@ -7,6 +7,8 @@ let
     telescope-recent-files
     nvim-lspconfig
     nvim-treesitter ## nvim-treesitter.withAllGrammars is available but slows down :checkhealth
+    lualine-nvim
+    vim-fugitive
 
     # highlighting + indentation for nix files
     vim-nix

@@ -19,7 +19,7 @@ vim.api.nvim_set_keymap("", "<leader>sk", ":lua require('telescope.builtin').key
 
 -- See all class names
 -- https://github.com/nvim-telescope/telescope.nvim/blob/aa83606299c5beeaf80e656efbf07bde258db7be/plugin/telescope.lua#L28
-vim.api.nvim_set_hl(0, "TelescopeSelection", { ctermfg = "white" })
+vim.api.nvim_set_hl(0, "TelescopeSelection", { ctermfg = "white", ctermbg = 237 })
 vim.api.nvim_set_hl(0, "TelescopeSlectionCaret", { ctermfg = "white" })
 vim.api.nvim_set_hl(0, "TelescopeMultiSelection", { ctermfg = "white" })
 vim.api.nvim_set_hl(0, "TelescopeNormal", { ctermfg = "white" })
