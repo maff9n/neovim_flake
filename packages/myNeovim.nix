@@ -9,6 +9,7 @@ let
     nvim-treesitter ## nvim-treesitter.withAllGrammars is available but slows down :checkhealth
     lualine-nvim
     vim-fugitive
+    gitsigns-nvim
 
     # highlighting + indentation for nix files
     vim-nix
