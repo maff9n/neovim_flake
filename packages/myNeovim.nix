@@ -1,25 +1,21 @@
 { pkgs }:
 let
-  customRC = import ../config { inherit pkgs; };
+
   plugins = with pkgs.vimPlugins; [
-    harpoon
-    telescope-nvim
-    telescope-recent-files
-    nvim-lspconfig
-    nvim-treesitter ## nvim-treesitter.withAllGrammars is available but slows down :checkhealth
-    lualine-nvim
-    vim-fugitive
-    gitsigns-nvim
-
-    # highlighting + indentation for nix files
-    vim-nix
-
-    # full support for LSP completion related capabilities
-    nvim-cmp
-    cmp-buffer
-    cmp-nvim-lsp
-    cmp-path
-    luasnip
+    harpoon # harpoon
+    telescope-nvim # telescope
+    telescope-recent-files # telescope
+    nvim-lspconfig # lsp
+    nvim-treesitter # nvim-treesitter.withAllGrammars available but slows down :checkhealth
+    lualine-nvim # lualine
+    vim-fugitive # fugitive
+    gitsigns-nvim # gitsigns
+    vim-nix # highlighting + indentation for nix files
+    nvim-cmp # cmp
+    cmp-buffer # cmp
+    cmp-nvim-lsp # cmp
+    cmp-path #cmp
+    luasnip #cmp
   ] ++ [
     (pkgs.vimUtils.buildVimPlugin {
       name = "copilot";
@@ -68,6 +64,31 @@ let
       packages.all.start = plugins;
     };
   };
+
+  # Import scripts for neovim
+  # messy but bears a certain flexibility
+  scripts2ConfigFiles = dir:
+    let
+      configDir = pkgs.stdenv.mkDerivation {
+        name = "nvim-${dir}-configs";
+        src = ./../${dir};
+        installPhase = ''
+          mkdir -p $out/
+          cp ./* $out/
+        '';
+      };
+    in
+    builtins.map (file: "${configDir}/${file}")
+      (builtins.attrNames (builtins.readDir configDir));
+  sourceConfigFiles = files:
+    builtins.concatStringsSep "\n" (builtins.map
+      (file:
+        (if pkgs.lib.strings.hasSuffix "lua" file then "luafile" else "source")
+        + " ${file}")
+      files);
+  lua = scripts2ConfigFiles "lua";
+  customRC = builtins.concatStringsSep "\n"
+    (builtins.map (configs: sourceConfigFiles configs) [ lua ]);
 in
 pkgs.writeShellApplication {
   name = "nvim";

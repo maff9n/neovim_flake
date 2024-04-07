@@ -1,3 +1,5 @@
+vim.g.mapleader = ' '
+
 -- Disable arrow keys
 vim.keymap.set('', '<up>', '<nop>')
 vim.keymap.set('', '<down>', '<nop>')
