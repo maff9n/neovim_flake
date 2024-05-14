@@ -1,3 +1,24 @@
+searchConfig = {
+    switch = false
+}
+
+function searchConfig:flip_switch()
+    self.switch = not self.switch
+    if self.switch then
+        print("Will search for hidden files from now on.")
+    else
+        print("Won't search for hidden files from now on.")
+    end
+end
+
+function searchConfig:search_hidden_files()
+    if self.switch then
+        return { hidden = true }
+    else
+        return {}
+    end
+end
+
 local telescope = require("telescope")
 telescope.setup({
     defaults = require("telescope.themes").get_ivy {
@@ -5,13 +26,16 @@ telescope.setup({
     terminal_colors = true,
 })
 
-local opt = { noremap = true }
+local opt = { noremap = true, silent = true }
 telescope.load_extension("recent_files")
 vim.api.nvim_set_keymap("", "<leader><leader>", ":lua require('telescope').extensions.recent_files.pick()<CR>", opt) -- lists recently opened files
-vim.api.nvim_set_keymap("", "<leader>sf", ":lua require('telescope.builtin').find_files()<CR>", opt)                 -- search for files respect gitignore
+vim.api.nvim_set_keymap("", "<leader>s.", ":lua searchConfig:flip_switch()<CR>", opt)                                -- toggle searching for hidden files
+vim.api.nvim_set_keymap("", "<leader>sf",
+    ":lua require('telescope.builtin').find_files(searchConfig:search_hidden_files())<CR>", opt)                     -- search for files respect gitignore
 vim.api.nvim_set_keymap("", "<leader>ss", ":lua require('telescope.builtin').builtin()<CR>", opt)                    -- lists Built-in pickers
 vim.api.nvim_set_keymap("", "<leader>sw", ":lua require('telescope.builtin').grep_string()<CR>", opt)                -- searches for the string under your cursor or the visual selection in your current working directory
-vim.api.nvim_set_keymap("", "<leader>sg", ":lua require('telescope.builtin').live_grep()<CR>", opt)                  -- search for a string
+vim.api.nvim_set_keymap("", "<leader>sg",
+    ":lua require('telescope.builtin').live_grep(searchConfig:search_hidden_files())<CR>", opt)                      -- search for a string
 vim.api.nvim_set_keymap("", "<leader>sd", ":lua require('telescope.builtin').diagnostics()<CR>", opt)                -- lists diagnostics for all open buffers
 vim.api.nvim_set_keymap("", "<leader>sr", ":lua require('telescope.builtin').resume()<CR>", opt)                     -- lists the results incl. multi-selections of the previous picker
 vim.api.nvim_set_keymap("", "<leader>sh", ":lua require('telescope.builtin').help_tags()<CR>", opt)                  -- lists nvim help tags
