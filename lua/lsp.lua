@@ -102,12 +102,6 @@ require('lspconfig').lua_ls.setup({
     capabilities = capabilities,
 })
 
-require('lspconfig').rnix.setup({
-    on_attach = on_attach,
-    flags = {},
-    capabilities = capabilities,
-})
-
 require('lspconfig').sqls.setup({
     on_attach = on_attach,
     flags = {},

@@ -33,7 +33,6 @@ let
       gopls
       golint
       govulncheck
-      rnix-lsp
       tree-sitter
       nodePackages.typescript
       nodePackages.typescript-language-server
