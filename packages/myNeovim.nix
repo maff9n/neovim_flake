@@ -39,7 +39,7 @@ let
       cmake-language-server
       yaml-language-server
       elmPackages.elm-language-server
-      nodePackages_latest.vscode-html-languageserver-bin
+      # nodePackages_latest.vscode-langservers-extracted
       lua-language-server
       sqls
       rust-analyzer
