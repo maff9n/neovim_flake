@@ -7,7 +7,7 @@
       url = "github:NixOS/nixpkgs/release-24.11";
     };
 
-    neovim = {
+    neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -23,51 +23,31 @@
     };
   };
 
-  outputs = { self, nixpkgs, neovim, telescope-recent-files-src, harpoon }:
+  outputs = { self, nixpkgs, telescope-recent-files-src, neovim-nightly-overlay, harpoon }:
     let
-      overlayFlakeInputs = prev: final: {
-        neovim = final.callPackage neovim { inherit nixpkgs; };
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; overlays = [ neovim-nightly-overlay.overlays.default applyConfiguration plugins ]; };
 
+      plugins = prev: final: {
         vimPlugins = final.vimPlugins // {
           telescope-recent-files = import ./packages/vimPlugins/telescopeRecentFiles.nix {
             src = telescope-recent-files-src;
             pkgs = prev;
           };
-
-          harpoon = prev.vimUtils.buildVimPlugin {
-            name = "harpoon";
-            src = harpoon;
-            buildInputs = with prev; [ stylua ];
-          };
         };
       };
-
-      overlayMyNeovim = prev: final: {
+      applyConfiguration = prev: final: {
         myNeovim = import ./packages/myNeovim.nix {
           pkgs = prev;
         };
       };
-
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs {
-          system = system;
-          overlays = [ overlayFlakeInputs overlayMyNeovim ];
-        };
-      });
-
     in
     {
-      packages = forEachSupportedSystem ({ pkgs }: rec {
-        default = pkgs.myNeovim;
-      });
+      packages.x86_64-linux.default = pkgs.myNeovim;
 
-      apps = forEachSupportedSystem ({ pkgs }: rec {
-        nvim = {
-          type = "app";
-          program = "${pkgs.myNeovim}/bin/nvim";
-        };
-      });
+      apps.x86_64-linux.nvim = {
+        type = "app";
+        program = "${pkgs.myNeovim}/bin/nvim";
+      };
     };
 }

@@ -1,7 +1,10 @@
+vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'GitSignsAdd' })
+vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'GitSignsChange' })
+
 require('gitsigns').setup {
     signs                             = {
-        add          = { hl = 'GitSignsAdd', text = '+' },
-        change       = { hl = 'GitSignsChange', text = '+' },
+        -- add          = { hl = 'GitSignsAdd', text = '+' },
+        -- change       = { hl = 'GitSignsChange', text = '+' },
         delete       = { text = '_' },
         topdelete    = { text = '‾' },
         changedelete = { text = '~' },
@@ -33,8 +36,5 @@ require('gitsigns').setup {
         virt_text_priority = 100,
     },
     current_line_blame_formatter      = '<author_time:%d.%m.%Y> > <author> > <summary>',
-    current_line_blame_formatter_opts = {
-        relative_time = false,
-    },
     status_formatter                  = nil, -- Use default
 }
