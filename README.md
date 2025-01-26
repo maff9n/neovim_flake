@@ -6,15 +6,15 @@
 
 
 This flake contains all information for my Neovim configuration.  
-With this repository in place I can enter my Neovim aka developer environment on every machine simply by running...  
+With this repository in place, I can launch my IDE (Neovim) on any machine simply by running:
 ```console
 nix run github:maff9n/neovim_flake
 ```
 
 ## Current Status
 This project is actively under development.  
-Proof of Concept successful.
 
 ## Credit
 
-The configuration heavily draws inspiration from the following [article](https://primamateria.github.io/blog/neovim-nix/).  
+The configuration is heavily inspired by this [article](https://primamateria.github.io/blog/neovim-nix/).  
+Additional ideas were deprived from [this project](https://github.com/figsoda/cfg).  
