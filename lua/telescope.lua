@@ -1,3 +1,7 @@
+local telescope = require("telescope")
+telescope.load_extension("recent_files")
+local map = vim.keymap.set
+
 searchConfig = {
     switch = false
 }
@@ -19,27 +23,23 @@ function searchConfig:search_hidden_files()
     end
 end
 
-local telescope = require("telescope")
 telescope.setup({
     defaults = require("telescope.themes").get_ivy {
     },
     terminal_colors = true,
 })
 
-local opt = { noremap = true, silent = true }
-telescope.load_extension("recent_files")
-vim.api.nvim_set_keymap("", "<leader><leader>", ":lua require('telescope').extensions.recent_files.pick()<CR>", opt) -- lists recently opened files
-vim.api.nvim_set_keymap("", "<leader>s.", ":lua searchConfig:flip_switch()<CR>", opt)                                -- toggle searching for hidden files
-vim.api.nvim_set_keymap("", "<leader>sf",
-    ":lua require('telescope.builtin').find_files(searchConfig:search_hidden_files())<CR>", opt)                     -- search for files respect gitignore
-vim.api.nvim_set_keymap("", "<leader>ss", ":lua require('telescope.builtin').builtin()<CR>", opt)                    -- lists Built-in pickers
-vim.api.nvim_set_keymap("", "<leader>sw", ":lua require('telescope.builtin').grep_string()<CR>", opt)                -- searches for the string under your cursor or the visual selection in your current working directory
-vim.api.nvim_set_keymap("", "<leader>sg",
-    ":lua require('telescope.builtin').live_grep(searchConfig:search_hidden_files())<CR>", opt)                      -- search for a string
-vim.api.nvim_set_keymap("", "<leader>sd", ":lua require('telescope.builtin').diagnostics()<CR>", opt)                -- lists diagnostics for all open buffers
-vim.api.nvim_set_keymap("", "<leader>sr", ":lua require('telescope.builtin').resume()<CR>", opt)                     -- lists the results incl. multi-selections of the previous picker
-vim.api.nvim_set_keymap("", "<leader>sh", ":lua require('telescope.builtin').help_tags()<CR>", opt)                  -- lists nvim help tags
-vim.api.nvim_set_keymap("", "<leader>sk", ":lua require('telescope.builtin').keymaps()<CR>", opt)                    -- lists keymaps
+map("n", "<leader><leader>", ":lua require('telescope').extensions.recent_files.pick()<CR>")
+map("n", "<leader><leader>", ":lua require('telescope').extensions.recent_files.pick()<CR>")                   -- lists recently opened files
+map("n", "<leader>s.", ":lua searchConfig:flip_switch()<CR>")                                                  -- toggle searching for hidden files
+map("n", "<leader>sf", ":lua require('telescope.builtin').find_files(searchConfig:search_hidden_files())<CR>") -- search for files respect gitignore
+map("n", "<leader>ss", ":lua require('telescope.builtin').builtin()<CR>")                                      -- lists Built-in pickers
+map("n", "<leader>sw", ":lua require('telescope.builtin').grep_string()<CR>")                                  -- searches for the string under your cursor or the visual selection in your current working directory
+map("n", "<leader>sg", ":lua require('telescope.builtin').live_grep(searchConfig:search_hidden_files())<CR>")  -- search for a string
+map("n", "<leader>sd", ":lua require('telescope.builtin').diagnostics()<CR>")                                  -- lists diagnostics for all open buffers
+map("n", "<leader>sr", ":lua require('telescope.builtin').resume()<CR>")                                       -- lists the results incl. multi-selections of the previous picker
+map("n", "<leader>sh", ":lua require('telescope.builtin').help_tags()<CR>")                                    -- lists nvim help tags
+map("n", "<leader>sk", ":lua require('telescope.builtin').keymaps()<CR>")                                      -- lists keymaps
 
 -- See all class names
 -- https://github.com/nvim-telescope/telescope.nvim/blob/aa83606299c5beeaf80e656efbf07bde258db7be/plugin/telescope.lua#L28

@@ -1,50 +1,51 @@
+local map = vim.keymap.set
 vim.g.mapleader = ' '
 
 -- Disable arrow keys
-vim.keymap.set('', '<up>', '<nop>')
-vim.keymap.set('', '<down>', '<nop>')
-vim.keymap.set('', '<left>', '<nop>')
-vim.keymap.set('', '<right>', '<nop>')
+map('', '<up>', '<nop>')
+map('', '<down>', '<nop>')
+map('', '<left>', '<nop>')
+map('', '<right>', '<nop>')
 
 -- Disable mouse partially
-vim.keymap.set('', '<RightMouse>', '<nop>')
-vim.keymap.set('', '<2-RightMouse>', '<nop>')
-vim.keymap.set('', '<3-RightMouse>', '<nop>')
-vim.keymap.set('', '<4-RightMouse>', '<nop>')
-vim.keymap.set('', '<RightDrag>', '<nop>')
-vim.keymap.set('', '<LeftMouse>', '<nop>')
-vim.keymap.set('', '<2-LeftMouse>', '<nop>')
-vim.keymap.set('', '<3-LeftMouse>', '<nop>')
-vim.keymap.set('', '<4-LeftMouse>', '<nop>')
-vim.keymap.set('', '<LeftDrag>', '<nop>')
-vim.keymap.set('', '<MiddleMouse>', '<nop>')
-vim.keymap.set('', '<2-MiddleMouse>', '<nop>')
-vim.keymap.set('', '<3-MiddleMouse>', '<nop>')
-vim.keymap.set('', '<4-MiddleMouse>', '<nop>')
+map('', '<RightMouse>', '<nop>')
+map('', '<2-RightMouse>', '<nop>')
+map('', '<3-RightMouse>', '<nop>')
+map('', '<4-RightMouse>', '<nop>')
+map('', '<RightDrag>', '<nop>')
+map('', '<LeftMouse>', '<nop>')
+map('', '<2-LeftMouse>', '<nop>')
+map('', '<3-LeftMouse>', '<nop>')
+map('', '<4-LeftMouse>', '<nop>')
+map('', '<LeftDrag>', '<nop>')
+map('', '<MiddleMouse>', '<nop>')
+map('', '<2-MiddleMouse>', '<nop>')
+map('', '<3-MiddleMouse>', '<nop>')
+map('', '<4-MiddleMouse>', '<nop>')
 
 -- Reposition Screen on Events
-vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', 'N', 'Nzzzv')
+map('n', 'n', 'nzzzv')
+map('n', 'N', 'Nzzzv')
 
-vim.keymap.set('', '<C-h>', '<C-w>h')
-vim.keymap.set('', '<C-j>', '<C-w>j')
-vim.keymap.set('', '<C-k>', '<C-w>k')
-vim.keymap.set('', '<C-l>', '<C-w>l')
+map('', '<C-h>', '<C-w>h')
+map('', '<C-j>', '<C-w>j')
+map('', '<C-k>', '<C-w>k')
+map('', '<C-l>', '<C-w>l')
 
 -- add point in undo list
-vim.keymap.set('i', '[', '[<C-g>u')
-vim.keymap.set('i', ']', ']<C-g>u')
+map('i', '[', '[<C-g>u')
+map('i', ']', ']<C-g>u')
 
-vim.keymap.set('v', '>', '>gv')
-vim.keymap.set('v', '<', '<gv')
-vim.keymap.set('n', '<', '<<')
-vim.keymap.set('n', '>', '>>')
+map('v', '>', '>gv')
+map('v', '<', '<gv')
+map('n', '<', '<<')
+map('n', '>', '>>')
 
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+map('v', 'J', ":m '>+1<CR>gv=gv")
+map('v', 'K', ":m '<-2<CR>gv=gv")
 
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
+map('n', '<C-d>', '<C-d>zz')
+map('n', '<C-u>', '<C-u>zz')
 
 -- Prevents space execution in case leaders follows no command
-vim.keymap.set('n', '<SPACE>', '<nop>')
+map('n', '<SPACE>', '<nop>')

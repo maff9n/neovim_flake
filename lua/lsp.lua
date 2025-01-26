@@ -1,3 +1,4 @@
+local map = vim.keymap.set
 toggle_diagnostic_hints = (function()
         local switch = true
         return function()
@@ -12,26 +13,25 @@ toggle_diagnostic_hints = (function()
         end
     end)()
 
-local opts = { noremap = true, silent = true }
-vim.api.nvim_set_keymap('n', '<space>d', '<cmd>lua toggle_diagnostic_hints()<CR>', opts)   -- toggle visibility of any diagnostic hints
-vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)  -- set the quickfix list to the diagnostics
-vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts) -- open the diagnostic float window
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)        -- go to the previous diagnostic
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)        -- go to the next diagnostic
+map('n', '<space>d', '<cmd>lua toggle_diagnostic_hints()<CR>')   -- toggle visibility of any diagnostic hints
+map('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>')  -- set the quickfix list to the diagnostics
+map('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>') -- open the diagnostic float window
+map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')        -- go to the previous diagnostic
+map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')        -- go to the next diagnostic
 
 local on_attach = function(client, bufnr)
     -- Mappings.
     -- KEYBINDINGS
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)           -- search for declaration of the symbol under the cursor
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)            -- jump to the definition of the symbol under the cursor
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)                  -- show hover information for the symbol under the cursor
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)        -- list all implementations of the symbol under the cursor in the quickfix window
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)     -- show signature help for the symbol under the cursor
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl',
-        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)                      -- list all workspace folders
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts) -- jump to the type definition of the symbol under the cursor
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)            -- list all references of the symbol under the cursor in the quickfix window
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)      -- format the current buffer
+    map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')              -- search for declaration of the symbol under the cursor
+    map(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')               -- jump to the definition of the symbol under the cursor
+    map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')                     -- show hover information for the symbol under the cursor
+    map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')           -- list all implementations of the symbol under the cursor in the quickfix window
+    map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')        -- show signature help for the symbol under the cursor
+    map(bufnr, 'n', '<space>wl',
+        '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>') -- list all workspace folders
+    map(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')    -- jump to the type definition of the symbol under the cursor
+    map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')               -- list all references of the symbol under the cursor in the quickfix window
+    map(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')         -- format the current buffer
     -- Mappings.
     -- AUTOCOMMANDS
     vim.api.nvim_create_autocmd('BufWritePre', {
