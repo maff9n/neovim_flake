@@ -2,6 +2,8 @@
 let
 
   plugins = with pkgs.vimPlugins; [
+    #useful!nvim-colorizer-lua
+    #useful!comment-nvim
     harpoon # harpoon
     telescope-nvim # telescope
     telescope-recent-files # telescope
@@ -39,7 +41,6 @@ let
       cmake-language-server
       yaml-language-server
       elmPackages.elm-language-server
-      # nodePackages_latest.vscode-langservers-extracted
       lua-language-server
       sqls
       rust-analyzer
